@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from pydantic_settings import BaseSettings
 
-DB_PATH = ":memory:"
+DB_PATH = "my_database.db"
 
 
 class DbSettings(BaseModel):
