@@ -1,31 +1,49 @@
-import datetime
+from contextlib import asynccontextmanager
 
-from models.entities import Base, Product
+import uvicorn
 
-from sqlalchemy import create_engine, select
-from sqlalchemy.orm import Session, DeclarativeBase
+from fastapi import FastAPI
 
-engine = create_engine("sqlite+pysqlite:///:memory:", echo=True)  # sql lite  в оперативе.
+# engine = create_engine("sqlite+pysqlite:///:memory:", echo=True)  # sql lite  в оперативе.
+#
+# Base.metadata.create_all(engine)
 
-with Session(engine) as session:
-    with session.begin():
-        Base.metadata.create_all(engine)
-        product1 = Product(
-            id=1,
-            author="Muzhchina",
-            product_name="Muzhskoi product",
-            start_time=datetime.datetime(
-                year=2024,
-                month=4,
-                day=5,
-                hour=15,
-                minute=0,
-            ),
-            price=100,
-            min_users=4,
-            max_users=12
-        )
-        session.add(product1)
-    with session.begin():
-        result = session.execute(select(Product))
-        print(result.scalar())
+
+# with Session(engine) as session:
+#     with session.begin():
+#         product1 = Product(
+#             author="Muzhchina",
+#             product_name="Muzhskoi product",
+#             start_time=datetime.datetime(
+#                 year=2024,
+#                 month=4,
+#                 day=5,
+#                 hour=15,
+#                 minute=0,
+#             ),
+#             price=100,
+#             min_users=4,
+#             max_users=12
+#         )
+#         session.add(product1)
+#     with session.begin():
+#         result = session.execute(select(Product))
+#         print(result.scalar().start_time)
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    print("Server started")
+    yield
+    print("Server shoot down")
+
+
+app = FastAPI(lifespan=lifespan)
+
+
+@app.get("/")
+def main_page():
+    return {"message": "Welcome to main page"}
+
+
+if __name__ == "__main__":
+    uvicorn.run("main:app", reload=True)
