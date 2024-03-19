@@ -4,31 +4,6 @@ import uvicorn
 
 from fastapi import FastAPI
 
-# engine = create_engine("sqlite+pysqlite:///:memory:", echo=True)  # sql lite  в оперативе.
-#
-# Base.metadata.create_all(engine)
-
-
-# with Session(engine) as session:
-#     with session.begin():
-#         product1 = Product(
-#             author="Muzhchina",
-#             product_name="Muzhskoi product",
-#             start_time=datetime.datetime(
-#                 year=2024,
-#                 month=4,
-#                 day=5,
-#                 hour=15,
-#                 minute=0,
-#             ),
-#             price=100,
-#             min_users=4,
-#             max_users=12
-#         )
-#         session.add(product1)
-#     with session.begin():
-#         result = session.execute(select(Product))
-#         print(result.scalar().start_time)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
